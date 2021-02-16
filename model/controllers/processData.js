@@ -1,11 +1,11 @@
-const Enum = require(`../config`);
+const Enums = require(`../config/enums`);
 const withParsers = require(`../utils/withParsers`);
 
 function processRow({ withParsers }) {
   const columnParsers = withParsers();
 
   return function (row) {
-    const length = Object.keys(Enum.Columns).length;
+    const length = Object.keys(Enums.Columns).length;
     const newRow = Array.from({ length }, () => null);
 
     return newRow.map((_, i) => columnParsers[i](row[i], row));

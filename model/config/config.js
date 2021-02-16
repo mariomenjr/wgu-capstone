@@ -1,13 +1,4 @@
-const Columns = {
-  Date: 0,
-  Open: 1,
-  High: 2,
-  Low: 3,
-  Close: 4,
-  Volume: 5,
-  MarketCap: 6,
-  Weekday: 7,
-};
+const CountWeekDays = 7;
 
 const PriceCollection = [
   `data/bitcoin_cash_price.csv`,
@@ -30,6 +21,6 @@ const PriceCollection = [
 ];
 
 module.exports = {
-  Columns,
+  CountWeekDays,
   PriceCollection
 };

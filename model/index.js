@@ -1,9 +1,8 @@
-const tf = require("@tensorflow/tfjs-node");
+const { PriceCollection } = require("./config/config");
 
 const fileReader = require("./utils/fileReader");
 const processData = require("./controllers/processData");
 const makeTensors = require("./controllers/makeTensors");
-const { PriceCollection } = require("./config");
 
 let isPromiseResolved = false;
 
