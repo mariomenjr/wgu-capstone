@@ -1,32 +1,66 @@
 const tf = require("@tensorflow/tfjs-node");
-const { CountWeekDays } = require("../config/config");
+
 const Enums = require("../config/enums");
+const { WeekDays } = require("../config/config");
 
-module.exports = (props) => (rows) => {
-  /*
-    What do I need to make this work?
+function makeTensors(domain, range, testSplit) {
+  const countSamples = domain.length;
+  if (countSamples !== range.length)
+    throw new Error(`Different numbers of Samples`);
 
-    - [x] Clean data
-    - [x] All Xs? Volume and Day of Week
-    - [ ] Convert data into tensors
-    - [ ] 
-  
-  */
-  console.debug(`Making tensors for ${rows.length} records!`);
+  const countTests = Math.round(countSamples * testSplit);
+  const countTrains = countSamples - countTests;
 
-  const length = CountWeekDays;
-  const domainMatrix = Array.from({ length }, () => []);
-  const rangeMatrix = Array.from({ length }, () => []);
+  const xDimension = domain[0].length;
 
-  for (const row of rows) {
-    const y = row[Enums.Columns.Weekday];
+  const xs = tf.tensor2d(domain, [countSamples, xDimension]);
+  const ys = tf.oneHot(tf.tensor1d(range).toInt(), WeekDays.length);
 
-    rangeMatrix[y].push(y);
-    domainMatrix[y].push([
-      row[Enums.Columns.Close] - row[Enums.Columns.Open],
-      row[Enums.Columns.Volume],
-    ]);
-  }
+  return [
+    xs.slice([0, 0], [countTrains, xDimension]),
+    xs.slice([countTrains, 0], [countTests, xDimension]),
+    ys.slice([0, 0], [countTrains, WeekDays.length]),
+    ys.slice([0, 0], [countTests, WeekDays.length]),
+  ];
+}
 
-  console.debug({ domainMatrix, rangeMatrix });
-};
+module.exports = ({ testSplit = 0.2 }) => (rows) =>
+  tf.tidy(() => {
+    const length = WeekDays.length;
+
+    const domainMatrix = Array.from({ length }, () => []);
+    const rangeMatrix = Array.from({ length }, () => []);
+
+    for (const row of rows) {
+      const y = row[Enums.Columns.Weekday];
+
+      rangeMatrix[y].push(y);
+      domainMatrix[y].push([
+        row[Enums.Columns.Close] - row[Enums.Columns.Open],
+        row[Enums.Columns.Volume],
+      ]);
+    }
+
+    const tensors = [[], [], [], []];
+
+    for (let i = 0; i < length; i++) {
+      const [xTrain, yTrain, xTest, yTest] = makeTensors(
+        domainMatrix[i],
+        rangeMatrix[i],
+        testSplit
+      );
+
+      tensors[0].push(xTrain);
+      tensors[1].push(yTrain);
+      tensors[2].push(xTest);
+      tensors[3].push(yTest);
+    }
+
+    const concatAxis = 0;
+    return [
+      tf.concat(tensors[0], concatAxis),
+      tf.concat(tensors[1], concatAxis),
+      tf.concat(tensors[2], concatAxis),
+      tf.concat(tensors[3], concatAxis),
+    ];
+  });

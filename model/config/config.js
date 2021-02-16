@@ -1,4 +1,13 @@
-const CountWeekDays = 7;
+
+const WeekDays = [
+  `Monday`,
+  `Tuesday`,
+  `Wednesday`,
+  `Thursday`,
+  `Friday`,
+  `Saturday`,
+  `Sunday`,
+]
 
 const PriceCollection = [
   `data/bitcoin_cash_price.csv`,
@@ -21,6 +30,6 @@ const PriceCollection = [
 ];
 
 module.exports = {
-  CountWeekDays,
+  WeekDays,
   PriceCollection
 };
