@@ -40,6 +40,4 @@ async function trainModel(xTrain, yTrain, xTest, yTest) {
   return model;
 }
 
-module.exports = (props) => async (tensors) => {
-  const model = await trainModel(...tensors);
-};
+module.exports = (props) => async (tensors) => await trainModel(...tensors);
