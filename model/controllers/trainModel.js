@@ -15,7 +15,7 @@ async function trainModel(xTrain, yTrain, xTest, yTest) {
       activation: `sigmoid`,
       inputShape: [xTrain.shape[1]],
     },
-    { units: 2, activation: `softmax` },
+    { units: 7, activation: `softmax` },
   ].forEach((layer) => model.add(tf.layers.dense(layer)));
 
   model.compile({
