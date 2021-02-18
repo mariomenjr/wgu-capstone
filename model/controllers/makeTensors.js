@@ -18,18 +18,18 @@ function makeTensors(domain, range, testSplit) {
 
   return [
     xs.slice([0, 0], [countTrains, xDimension]),
-    xs.slice([countTrains, 0], [countTests, xDimension]),
     ys.slice([0, 0], [countTrains, WeekDays.length]),
+    xs.slice([countTrains, 0], [countTests, xDimension]),
     ys.slice([0, 0], [countTests, WeekDays.length]),
   ];
 }
 
 module.exports = ({ testSplit = 0.2 }) => (rows) =>
   tf.tidy(() => {
-    const length = WeekDays.length;
+    const weekDaysCount = WeekDays.length;
 
-    const domainMatrix = Array.from({ length }, () => []);
-    const rangeMatrix = Array.from({ length }, () => []);
+    const domainMatrix = Array.from({ length: weekDaysCount }, () => []);
+    const rangeMatrix = Array.from({ length: weekDaysCount }, () => []);
 
     for (const row of rows) {
       const y = row[Enums.Columns.Weekday];
@@ -40,10 +40,10 @@ module.exports = ({ testSplit = 0.2 }) => (rows) =>
         row[Enums.Columns.Volume],
       ]);
     }
-
+    
     const tensors = [[], [], [], []];
 
-    for (let i = 0; i < length; i++) {
+    for (let i = 0; i < weekDaysCount; i++) {
       const [xTrain, yTrain, xTest, yTest] = makeTensors(
         domainMatrix[i],
         rangeMatrix[i],
