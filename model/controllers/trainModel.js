@@ -1,13 +1,10 @@
 const tf = require("@tensorflow/tfjs-node");
 
-async function trainModel(xTrain, yTrain, xTest, yTest) {
-  console.debug({ xTrain, yTrain, xTest, yTest });
-
+async function trainModel({ tensors: [xTrain, yTrain, xTest, yTest], props }) {
+  
   const model = tf.sequential();
 
-  const learningRate = 0.01;
-  const countEpochs = 40;
-  const optimizer = tf.train.adam(learningRate);
+  const optimizer = tf.train.adam(props.learningRate);
 
   [
     {
@@ -25,19 +22,16 @@ async function trainModel(xTrain, yTrain, xTest, yTest) {
   });
 
   const history = await model.fit(xTrain, yTrain, {
-    epochs: countEpochs,
+    epochs: props.countEpochs,
     validationData: [xTest, yTest],
     callbacks: {
       onEpochEnd: async (epoch, logs) => {
-        console.debug(`Epoch: ${epoch} Logs: ${logs}`);
         await tf.nextFrame();
       },
     },
   });
 
-  console.debug({ history });
-
   return model;
 }
 
-module.exports = (props) => async (tensors) => await trainModel(...tensors);
+module.exports = (props) => async (tensors) => await trainModel({ tensors, props });

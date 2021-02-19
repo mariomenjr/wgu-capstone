@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const { PriceCollection } = require("./config/config");
 
 const fileReader = require("./utils/fileReader");
@@ -7,20 +9,15 @@ const makeTensors = require("./controllers/makeTensors");
 const trainModel = require("./controllers/trainModel");
 const evaluateModel = require("./controllers/evaluateModel");
 
-let isPromiseResolved = false;
+const testSplit = process.env.TEST_SPLIT || 0.2;
+const countEpochs = process.env.COUNT_EPOCHS || 50;
+const learningRate = process.env.LEARNING_RATE || 0.1;
 
-Promise.all(PriceCollection.map((filePath) => fileReader(filePath)))
-  .then(processData({}))
-  .then(makeTensors({ testSplit: 0.2 }))
-  .then(trainModel({}))
-  .then(evaluateModel({}))
-  .catch((e) => console.error({ e }))
-  .finally(() => {
-    isPromiseResolved = true;
-  });
-
-function wait() {
-  if (!isPromiseResolved) setTimeout(wait, 1000);
-}
-
-wait();
+module.exports = function buildModel() {
+  return Promise.all(PriceCollection.map((filePath) => fileReader(filePath)))
+    .then(processData({}))
+    .then(makeTensors({ testSplit }))
+    .then(trainModel({ countEpochs, learningRate }))
+    .then(evaluateModel({}))
+    .catch((e) => console.error({ e }));
+};
