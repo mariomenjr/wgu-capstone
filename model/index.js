@@ -1,15 +1,19 @@
-const tf = require("@tensorflow/tfjs-node");
+const { PriceCollection } = require("./config/config");
 
 const fileReader = require("./utils/fileReader");
+
 const processData = require("./controllers/processData");
 const makeTensors = require("./controllers/makeTensors");
-const { PriceCollection } = require("./config");
+const trainModel = require("./controllers/trainModel");
+const evaluateModel = require("./controllers/evaluateModel");
 
 let isPromiseResolved = false;
 
 Promise.all(PriceCollection.map((filePath) => fileReader(filePath)))
-  .then(processData())
-  .then(makeTensors())
+  .then(processData({}))
+  .then(makeTensors({ testSplit: 0.2 }))
+  .then(trainModel({}))
+  .then(evaluateModel({}))
   .catch((e) => console.error({ e }))
   .finally(() => {
     isPromiseResolved = true;

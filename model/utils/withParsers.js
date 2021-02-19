@@ -1,21 +1,21 @@
-const Enum = require(`../config`);
+const Enums = require(`../config/enums`);
 
 function withParsers() {
-  const setWeekday = (_, row) => new Date(row[Enum.Columns.Date]).getDay();
+  const setWeekday = (_, row) => new Date(row[Enums.Columns.Date]).getDay();
   const enforceNumbers = (fieldValue) => {
     const number = Number(`${fieldValue}`.replace(/\,/g, ``));
     return isNaN(number) ? null : number;
   };
 
   return {
-    [Enum.Columns.Date]: (fieldValue) => fieldValue,
-    [Enum.Columns.Open]: enforceNumbers,
-    [Enum.Columns.High]: enforceNumbers,
-    [Enum.Columns.Low]: enforceNumbers,
-    [Enum.Columns.Close]: enforceNumbers,
-    [Enum.Columns.Volume]: enforceNumbers,
-    [Enum.Columns.MarketCap]: enforceNumbers,
-    [Enum.Columns.Weekday]: setWeekday
+    [Enums.Columns.Date]: (fieldValue) => fieldValue,
+    [Enums.Columns.Open]: enforceNumbers,
+    [Enums.Columns.High]: enforceNumbers,
+    [Enums.Columns.Low]: enforceNumbers,
+    [Enums.Columns.Close]: enforceNumbers,
+    [Enums.Columns.Volume]: enforceNumbers,
+    [Enums.Columns.MarketCap]: enforceNumbers,
+    [Enums.Columns.Weekday]: setWeekday
   };
 }
 
