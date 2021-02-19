@@ -20,9 +20,9 @@
   },
   "scripts": {
     "model": "node model/index.js",
-    "dev": "next dev",
+    "dev": "node server.js",
     "build": "next build",
-    "start": "next start"
+    "start": "NODE_ENV=production node server.js"
   },
   "author": "Mario Menjívar <mariomenjr@gmail.com>",
   "license": "MIT"
