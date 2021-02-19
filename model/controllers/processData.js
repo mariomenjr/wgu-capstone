@@ -12,7 +12,7 @@ function processRow({ withParsers }) {
   };
 }
 
-module.exports = () => (rows) =>
+module.exports = (_) => (rows) =>
   rows
     .reduce((a, c) => a.concat(c), [])
     .map(processRow({ withParsers }))
