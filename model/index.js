@@ -7,7 +7,6 @@ const fileReader = require("./utils/fileReader");
 const processData = require("./controllers/processData");
 const makeTensors = require("./controllers/makeTensors");
 const trainModel = require("./controllers/trainModel");
-const evaluateModel = require("./controllers/evaluateModel");
 
 const testSplit = process.env.TEST_SPLIT || 0.2;
 const countEpochs = process.env.COUNT_EPOCHS || 50;
@@ -18,6 +17,5 @@ module.exports = function() {
     .then(processData({}))
     .then(makeTensors({ testSplit }))
     .then(trainModel({ countEpochs, learningRate }))
-    .then(evaluateModel({}))
     .catch((e) => console.error({ e }));
 };
