@@ -1,7 +1,7 @@
 // server.js
-const { createServer } = require('http')
-const { parse } = require('url')
-const next = require('next')
+const { createServer } = require('http');
+const { parse } = require('url');
+const next = require('next');
 
 const model = require('./model');
 
@@ -10,10 +10,10 @@ const app = next({ dev })
 const handle = app.getRequestHandler()
 
 app.prepare().then(async () => {
-  const wgu = await model();
+  const sequential = await model();
 
   createServer((req, res) => {
-    req.wgu = wgu;
+    req.wgu = { sequential };
     // Be sure to pass `true` as the second argument to `url.parse`.
     // This tells it to parse the query portion of the URL.
     handle(req, res, parse(req.url, true));
