@@ -1,11 +1,8 @@
+import Container from "../components/Container";
+import Main from "../components/Main";
+
 function Index(props) {
-  return (
-    <div>
-      Welcome to Next.js!
-      <br />
-      <pre>{JSON.stringify(props)}</pre>
-    </div>
-  );
+  return <Container><Main /></Container>;
 }
 
 export default Index;
