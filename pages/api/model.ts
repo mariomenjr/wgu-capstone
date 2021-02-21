@@ -7,10 +7,11 @@ export default async function handler(req: WguApiRequest, res: WguApiResponse) {
   const { volume, increase } = req.query;
   const sequential = req.wgu.sequential;
   
-  const vectors = [[+volume, +increase, 1]];
-  const samples = tensor2d(vectors, [vectors.length, 3]);
+  const vector = [+volume, +increase, 1];
+  const samples = tensor2d([vector], [1, vector.length]);
 
-  const prediction = sequential.predict(samples) as Tensor<Rank>;
+  const tensor = sequential.predict(samples) as Tensor<Rank>;
+  const prediction = await tensor.array();
 
-  return res.json({ prediction: await prediction.array() });
+  return res.json((prediction as number[][]).shift());
 }
