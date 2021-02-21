@@ -38,6 +38,7 @@ module.exports = ({ testSplit = 0.2 }) => (rows) =>
       domainMatrix[y].push([
         row[Enums.Columns.Close] - row[Enums.Columns.Open],
         row[Enums.Columns.Volume],
+        row[Enums.Columns.Symbol]
       ]);
     }
     
