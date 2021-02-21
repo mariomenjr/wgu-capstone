@@ -12,8 +12,8 @@ const testSplit = process.env.TEST_SPLIT || 0.2;
 const countEpochs = process.env.COUNT_EPOCHS || 50;
 const learningRate = process.env.LEARNING_RATE || 0.1;
 
-module.exports = function() {
-  return Promise.all(PriceCollection.map((filePath) => fileReader(filePath)))
+module.exports = function model() {
+  return Promise.all(PriceCollection.map((fileObj) => fileReader.load(fileObj)))
     .then(processData({}))
     .then(makeTensors({ testSplit }))
     .then(trainModel({ countEpochs, learningRate }))

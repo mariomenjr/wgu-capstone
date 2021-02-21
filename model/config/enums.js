@@ -6,7 +6,8 @@ const Columns = {
   Close: 4,
   Volume: 5,
   MarketCap: 6,
-  Weekday: 7,
+  Symbol: 7,
+  Weekday: 8,
 };
 
 const Enums = { Columns };
