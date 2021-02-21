@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "WGU Capstone Project for Graduation",
   "dependencies": {
+    "@tailwindcss/forms": "^0.2.1",
     "@tensorflow/tfjs-node": "^3.0.0",
     "autoprefixer": "^10.2.4",
     "csv": "^5.3.2",
