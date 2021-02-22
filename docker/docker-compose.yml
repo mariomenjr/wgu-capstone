@@ -1,8 +1,9 @@
 version: "3.1"
 services:
-    app:
-        user: node
+    wgu-capstone:
         container_name: wgu-capstone
+        image: wgu-capstone:1.0.0-rc
+        user: node
         build:
             context: ./../
             args:
