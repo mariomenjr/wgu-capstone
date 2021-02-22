@@ -1,37 +1,48 @@
 import React from "react";
 
 export default function PredictedWeekday({
-  predictedDay,
-  chancePercentage,
+  greaterDay,
+  greaterChance,
+  lesserDay,
+  lesserChance,
 }: {
-  predictedDay: string
-  chancePercentage: number
+  greaterDay: string;
+  greaterChance: number;
+  lesserDay: string;
+  lesserChance: number;
 }) {
-  const colorByChance = React.useMemo(() => {
-    return [
-      {
-        color: `text-red-600`,
-        check: (chance: number): boolean => chance >= 0 && chance < 0.05,
-      },
-      {
-        color: `text-red-300`,
-        check: (chance: number): boolean => chance >= 0.05 && chance < 0.10,
-      },
-      {
-        color: `text-yellow-600`,
-        check: (chance: number): boolean => chance >= 0.10 && chance < 0.15,
-      },
-      {
-        color: `text-green-300`,
-        check: (chance: number): boolean => chance >= 0.15 && chance <= 0.20,
-      },
-      {
-        color: `text-green-600`,
-        check: (chance: number): boolean => chance >= 0.20,
-      },
-    ].find((section) => section.check(chancePercentage))?.color ?? ``;
-  }, [chancePercentage]);
-  return <h1 className={`font-sans font-semibold text-5xl sm:text-8xl tracking-wide text-center py-6 ${colorByChance}`}>
-    {predictedDay}
-  </h1>;
+  
+  const {
+    mostLikelyDay,
+    mostLikelyColor,
+    leastLikelyDay,
+    leastLikelyColor,
+  } = React.useMemo(() => {
+    const isGreaterGood = `${greaterChance}`.slice(-1) === `+`;
+    const isLesserGood = `${lesserDay}`.slice(-1) === `+`;
+    
+    return {
+      // TODO: We'd like to have this detect if:
+      // 1. Even though is still not a good idea to buy, which day would be less bad?
+      mostLikelyDay: greaterDay,
+      mostLikelyColor: isGreaterGood ? `text-green-500` : `text-red-500`,
+      leastLikelyDay: lesserDay,
+      leastLikelyColor: isLesserGood ? `text-green-500` : `text-red-500`,
+    };
+  }, [greaterDay, greaterChance, lesserDay, lesserChance]);
+
+  return (
+    <>
+      <h1
+        className={`font-sans font-semibold text-5xl sm:text-8xl tracking-wide text-center pt-6 ${mostLikelyColor}`}
+      >
+        {mostLikelyDay}
+      </h1>
+      <h1
+        className={`font-sans font-semibold text-xl sm:text-4xl tracking-wide text-center pb-6 ${leastLikelyColor}`}
+      >
+        {leastLikelyDay}
+      </h1>
+    </>
+  );
 }

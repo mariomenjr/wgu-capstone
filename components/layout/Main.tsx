@@ -8,18 +8,13 @@ import PredictedWeekday from "../PredictedWeekday";
 
 export default function Main({ chances, query }) {
   const currentCurrency = React.useMemo(
-    () => {
-      const found = PriceCollection.find((price) => price.category === +(query.currency ?? `0`));
-      console.debug({ found });
-      return found;
-    },
+    () => PriceCollection.find((price) => price.category === +(query.currency ?? `0`)),
     [query.currency]
   );
 
-  const { predictedDay, chancePercentage } = React.useMemo(() => {
-    console.debug({ chances, query });
+  const predictionLimits = React.useMemo(() => {
     
-    const [weekDayIndex, chancePercentage] = chances.reduce(
+    const [greaterIndex, greaterChance] = chances.reduce(
       (hold: number[], current: number, index: number) => {
         if (hold.length === 0) return [index, current];
         return current > hold[1] ? [index, current] : hold;
@@ -27,15 +22,30 @@ export default function Main({ chances, query }) {
       []
     );
 
+    const [lesserIndex, lesserChance] = chances.reduce(
+      (hold: number[], current: number, index: number) => {
+        if (hold.length === 0) return [index, current];
+
+        console.debug({ current, hold: hold[1], lesser: current < hold[1] });
+
+        return current < hold[1] ? [index, current] : hold;
+      },
+      []
+    );
+
     return {
-      predictedDay: WeekDays[weekDayIndex],
-      chancePercentage,
+      greaterDay: WeekDays[greaterIndex],
+      greaterChance: +greaterChance,
+      lesserDay: WeekDays[lesserIndex], 
+      lesserChance: +lesserChance
     };
   }, [chances]);
 
+  console.debug({predictionLimits});
+
   return <div className={`flex flex-col w-full md:w-8/12 px-12`}>
     <DecorativeLegend {...{ currentCurrency }} />
-    <PredictedWeekday {...{ predictedDay, chancePercentage: +chancePercentage }} />
+    <PredictedWeekday {...predictionLimits} />
     <DomainInputs {...{ query }} />
   </div>;
 }
