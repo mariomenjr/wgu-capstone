@@ -1,4 +1,5 @@
 const tf = require("@tensorflow/tfjs-node");
+const { WeekDays } = require("../config/config");
 
 async function trainModel({ tensors: [xTrain, yTrain, xTest, yTest], props }) {
   
@@ -12,7 +13,7 @@ async function trainModel({ tensors: [xTrain, yTrain, xTest, yTest], props }) {
       activation: `sigmoid`,
       inputShape: [xTrain.shape[1]],
     },
-    { units: 7, activation: `softmax` },
+    { units: WeekDays.length, activation: `softmax` },
   ].forEach((layer) => model.add(tf.layers.dense(layer)));
 
   model.compile({
