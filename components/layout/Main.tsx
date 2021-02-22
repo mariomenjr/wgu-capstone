@@ -1,13 +1,21 @@
 import React from "react";
 
-import { WeekDays } from "../../model/config/config";
+import { WeekDays, PriceCollection } from "../../model/config/config";
 
 import DomainInputs from "../DomainInputs";
 import DecorativeLegend from "../DecorativeLegend";
 import PredictedWeekday from "../PredictedWeekday";
 
 export default function Main({ chances, query }) {
-  const currentCurrency = `Bitcoin`;
+  const currentCurrency = React.useMemo(
+    () => {
+      const found = PriceCollection.find((price) => price.category === +(query.currency ?? `0`));
+      console.debug({ found });
+      return found;
+    },
+    [query.currency]
+  );
+
   const { predictedDay, chancePercentage } = React.useMemo(() => {
     console.debug({ chances, query });
     
