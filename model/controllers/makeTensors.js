@@ -29,14 +29,18 @@ module.exports = ({ testSplit = 0.2 }) => (rows) =>
     const domainMatrix = Array.from({ length: weekDaysCount }, () => []);
     const rangeMatrix = Array.from({ length: weekDaysCount }, () => []);
 
-    for (const row of rows) {
+    for (let i = 0; i < rows.length; i++) {
+      const row = rows[i];
+      const prevRow = rows[i === 0 ? 0 : i - 1];
+
       const weekDayIndex = row[Enums.Columns.Weekday] - 1;
 
       rangeMatrix[weekDayIndex].push(row[Enums.Columns.Weekday]);
       domainMatrix[weekDayIndex].push([
         row[Enums.Columns.Close] - row[Enums.Columns.Open],
-        row[Enums.Columns.Volume],
+        row[Enums.Columns.Volume] - prevRow[Enums.Columns.Volume],
         row[Enums.Columns.Symbol],
+        row[Enums.Columns.WeekNumber],
       ]);
     }
     

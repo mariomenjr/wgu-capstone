@@ -5,10 +5,10 @@ const next = require('next');
 
 const model = require('./model');
 
-const port = process.env.PORT || 3001; 
-const dev = process.env.NODE_ENV !== 'production'
-const app = next({ dev })
-const handle = app.getRequestHandler()
+const port = process.env.PORT || 3001;
+const dev = process.env.NODE_ENV !== 'production';
+const app = next({ dev });
+const handle = app.getRequestHandler();
 
 app.prepare().then(async () => {
   const sequential = await model();

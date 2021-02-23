@@ -8,6 +8,7 @@ const Columns = {
   MarketCap: 6,
   Symbol: 7,
   Weekday: 8,
+  WeekNumber: 9,
 };
 
 const Enums = { Columns };

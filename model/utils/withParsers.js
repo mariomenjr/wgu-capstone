@@ -23,6 +23,7 @@ function withParsers() {
     [Enums.Columns.MarketCap]: enforceNumbers,
     [Enums.Columns.Symbol]: leaveAsIs,
     [Enums.Columns.Weekday]: setWeekday,
+    [Enums.Columns.WeekNumber]: (_, row) => new Date(row[Enums.Columns.Date]).getWeekNumber(),
   };
 }
 
