@@ -25,9 +25,6 @@ export default function Main({ chances, query }) {
     const [lesserIndex, lesserChance] = chances.reduce(
       (hold: number[], current: number, index: number) => {
         if (hold.length === 0) return [index, current];
-
-        console.debug({ current, hold: hold[1], lesser: current < hold[1] });
-
         return current < hold[1] ? [index, current] : hold;
       },
       []
