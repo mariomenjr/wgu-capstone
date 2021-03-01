@@ -14,18 +14,18 @@ export default function Main({ chances, query }) {
 
   const predictionLimits = React.useMemo(() => {
     
-    const [greaterIndex, greaterChance] = chances.reduce(
+    const [greaterIndex, greaterChance] = chances.slice(7, 14).reduce(
       (hold: number[], current: number, index: number) => {
-        if (hold.length === 0) return [index, current];
-        return current > hold[1] ? [index, current] : hold;
+        if (hold.length === 0) return [index + 7, current];
+        return current > hold[1] ? [index + 7, current] : hold;
       },
       []
     );
 
-    const [lesserIndex, lesserChance] = chances.reduce(
+    const [lesserIndex, lesserChance] = chances.slice(0, 7).reduce(
       (hold: number[], current: number, index: number) => {
         if (hold.length === 0) return [index, current];
-        return current < hold[1] ? [index, current] : hold;
+        return current > hold[1] ? [index, current] : hold;
       },
       []
     );
@@ -37,8 +37,6 @@ export default function Main({ chances, query }) {
       lesserChance: +lesserChance
     };
   }, [chances]);
-
-  console.debug({predictionLimits});
 
   return <div className={`flex flex-col w-full md:w-8/12 px-12`}>
     <DecorativeLegend {...{ currentCurrency }} />

@@ -18,16 +18,13 @@ export default function PredictedWeekday({
     leastLikelyDay,
     leastLikelyColor,
   } = React.useMemo(() => {
-    const isGreaterGood = `${greaterChance}`.slice(-1) === `+`;
-    const isLesserGood = `${lesserDay}`.slice(-1) === `+`;
-    
     return {
       // TODO: We'd like to have this detect if:
       // 1. Even though is still not a good idea to buy, which day would be less bad?
       mostLikelyDay: greaterDay,
-      mostLikelyColor: isGreaterGood ? `text-green-500` : `text-red-500`,
+      mostLikelyColor: `text-green-500`,
       leastLikelyDay: lesserDay,
-      leastLikelyColor: isLesserGood ? `text-green-500` : `text-red-500`,
+      leastLikelyColor: `text-red-500`,
     };
   }, [greaterDay, greaterChance, lesserDay, lesserChance]);
 
