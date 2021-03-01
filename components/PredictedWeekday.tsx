@@ -35,11 +35,11 @@ export default function PredictedWeekday({
       >
         {mostLikelyDay}
       </h1>
-      <h1
-        className={`font-sans font-semibold text-xl sm:text-4xl tracking-wide text-center pb-6 ${leastLikelyColor}`}
+      <h3
+        className={`font-sans font-semibold text-lg sm:text-2xl tracking-wide text-center pb-6 ${leastLikelyColor}`}
       >
         {leastLikelyDay}
-      </h1>
+      </h3>
     </>
   );
 }
